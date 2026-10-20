@@ -87,7 +87,7 @@ async function openFile(file){
   rendition.on('selected',(cfiRange,contents)=>{try{const range=rendition.getRange(cfiRange);selectedText=range.toString().trim();selectedCfi=cfiRange;if(selectedText){const pop=$('selectionPop');pop.style.display='flex';pop.style.left='50%';pop.style.top='auto';pop.style.bottom='calc(84px + env(safe-area-inset-bottom))';pop.style.transform='translateX(-50%)'}}catch(e){}});
   await book.opened;
   await rendition.display();
-  const prog=JSON.parse(localStorage.getItem(storeKey('progress'))||'null');if(prog&&prog.cfi){try{await rendition.display(prog.cfi)}catch(e){}}
+  let prog=null;try{prog=JSON.parse(localStorage.getItem(storeKey('progress'))||'null')}catch(e){}if(prog&&prog.cfi){try{await rendition.display(prog.cfi)}catch(e){}}
   renderSavedList();toast('Your reading nook is ready.');
  }catch(err){console.error(err);toast('Could not open this EPUB: '+((err&&err.message)||err||'unknown error'));}
 }
