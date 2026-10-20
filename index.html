@@ -48,10 +48,11 @@ main{max-width:1100px;margin:auto;padding:28px 18px 40px}.welcome{max-width:610p
 </aside>
 </div>
 </section>
-<input id="fileInput" type="file" accept=".epub,application/epub+zip" hidden>
+<input id="fileInput" type="file" hidden>
 <div id="modalBackdrop" class="modal-backdrop"><div class="modal"><h2 id="modalTitle">Contents</h2><div id="modalBody"></div><div style="text-align:right;margin-top:18px"><button id="closeModal">Close</button></div></div></div>
 <div id="selectionPop" class="selection-pop"><button id="highlightSelection">Highlight</button><button id="cancelSelection">×</button></div>
 <div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
 <script>
 (() => {
@@ -73,22 +74,22 @@ function setTheme(){const t=themes[themeIndex];document.documentElement.style.se
 function updateProgress(location){if(!location)return;currentCfi=location.start.cfi;currentHref=location.start.href;currentPercent=location.start.percentage||0;$('progress').style.width=Math.max(0,Math.min(100,currentPercent*100))+'%';$('locationLabel').textContent=Math.round(currentPercent*100)+'% through';saveProgress();renderSavedList()}
 function saveProgress(){if(!bookKey||!currentCfi)return;try{localStorage.setItem(storeKey('progress'),JSON.stringify({cfi:currentCfi,href:currentHref,percent:currentPercent}))}catch(e){}}
 async function openFile(file){
- if(!file)return;if(!file.name.toLowerCase().endsWith('.epub')){toast('Please choose an EPUB file.');return}
- if(!window.ePub){toast('Reader engine did not load. Check your connection and refresh.');return}
+ if(!file)return;if(!window.JSZip||!window.ePub){toast('Reader engine did not load. Check your connection and refresh.');return}
  if(rendition){try{rendition.destroy()}catch(e){}rendition=null}if(book){try{book.destroy()}catch(e){}book=null}
  bookName=file.name.replace(/\.epub$/i,'');bookKey='file-'+file.name+'-'+file.size;
  $('bookTitle').textContent=bookName;$('bookAuthor').textContent='Loading your book…';$('viewer').innerHTML='';showReader();toast('Opening your book…');
  try{
-  const data=await file.arrayBuffer();book=ePub(data);rendition=book.renderTo('viewer',{width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default'});
+  const data=await file.arrayBuffer();book=ePub(data,{openAs:'binary'});rendition=book.renderTo('viewer',{width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default'});
   rendition.themes.default({'body':{color:themes[themeIndex].fg+' !important','background':themes[themeIndex].bg+' !important','font-family':'Georgia, serif','line-height':'1.7 !important','padding':'0 4% !important'},'p':{'line-height':'1.7 !important'},'::selection':{background:'#f2df8e'}});
   rendition.themes.fontSize(fontSize+'%');
   book.ready.then(async()=>{const meta=await book.loaded.metadata;$('bookTitle').textContent=meta.title||bookName;$('bookAuthor').textContent=meta.creator||'A quiet place for this story';});
   rendition.on('relocated',updateProgress);
   rendition.on('selected',(cfiRange,contents)=>{try{const range=rendition.getRange(cfiRange);selectedText=range.toString().trim();selectedCfi=cfiRange;if(selectedText){const pop=$('selectionPop');pop.style.display='flex';pop.style.left='50%';pop.style.top='auto';pop.style.bottom='calc(84px + env(safe-area-inset-bottom))';pop.style.transform='translateX(-50%)'}}catch(e){}});
+  await book.opened;
   await rendition.display();
   const prog=JSON.parse(localStorage.getItem(storeKey('progress'))||'null');if(prog&&prog.cfi){try{await rendition.display(prog.cfi)}catch(e){}}
   renderSavedList();toast('Your reading nook is ready.');
- }catch(err){console.error(err);toast('This EPUB could not be opened. Try another file.');}
+ }catch(err){console.error(err);toast('Could not open this EPUB: '+((err&&err.message)||err||'unknown error'));}
 }
 function addBookmark(){if(!currentCfi){toast('Turn to a page first.');return}const arr=readStore('bookmarks');if(arr.some(x=>x.cfi===currentCfi)){toast('This page is already bookmarked.');return}arr.unshift({cfi:currentCfi,href:currentHref,percent:currentPercent,label:'Page at '+Math.round(currentPercent*100)+'%',date:Date.now()});writeStore('bookmarks',arr);renderSavedList();toast('Page bookmarked.')}
 function addHighlight(){if(!selectedText||!selectedCfi){toast('Select a passage in the book first.');return}const arr=readStore('highlights');if(arr.some(x=>x.cfi===selectedCfi)){toast('That passage is already highlighted.');$('selectionPop').style.display='none';return}arr.unshift({cfi:selectedCfi,text:selectedText,href:currentHref,date:Date.now()});writeStore('highlights',arr);try{rendition.annotations.highlight(selectedCfi,{},()=>{},'alcove-highlight',{fill:'#f2df8e', 'fill-opacity':'0.55','mix-blend-mode':'multiply'})}catch(e){}$('selectionPop').style.display='none';renderSavedList();toast('Passage highlighted.')}
