@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f0e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="alcove.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>alcove.</title>
+<style>
+:root{--paper:#f5f0e8;--paper2:#fffdf8;--ink:#302d29;--muted:#898176;--line:#e4dbcf;--accent:#8a715e;--highlight:#f2df8e;--shadow:0 12px 36px #3d2e1c12}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}button,input,select{font:inherit}button{cursor:pointer;color:inherit;border:1px solid var(--line);background:var(--paper2);border-radius:999px;padding:10px 14px;transition:background .15s}button:active{transform:scale(.98)}button.primary{background:var(--ink);color:var(--paper2);border-color:var(--ink)}button.iconbtn{width:42px;height:42px;padding:0;display:grid;place-items:center;font-family:Arial,sans-serif;font-size:18px}button:disabled{opacity:.4;cursor:default}
+header{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--line);background:#f5f0e8ed;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}.wordmark{font-size:29px;letter-spacing:-1.6px;font-weight:normal}.wordmark span{color:var(--accent)}.header-actions{display:flex;gap:8px;align-items:center}
+main{max-width:1100px;margin:auto;padding:28px 18px 40px}.welcome{max-width:610px;margin:8vh auto 0;text-align:center}.eyebrow{text-transform:uppercase;letter-spacing:2.5px;font:10px Arial,sans-serif;color:var(--muted)}h1{font-size:clamp(38px,8vw,58px);font-weight:normal;letter-spacing:-2px;margin:18px 0 12px}.welcome p{font-size:17px;line-height:1.7;color:#756d62}.upload-card{margin:30px auto 0;padding:28px 20px;border:1px dashed #cbbca9;border-radius:22px;background:#fffdf85c;max-width:430px}.upload-symbol{font-size:34px;color:var(--accent);margin-bottom:10px}.upload-card strong{display:block;font-size:18px;font-weight:normal;margin-bottom:7px}.upload-card small{color:var(--muted);line-height:1.6}.upload-card button{margin-top:20px}.privacy{margin-top:20px;color:var(--muted);font:11px Arial,sans-serif;letter-spacing:.3px}
+#reader{display:none;max-width:1200px;margin:auto;padding:0 14px 24px}.booktop{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 4px}.booktitle{min-width:0}.booktitle strong{display:block;font-size:17px;font-weight:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.booktitle small{display:block;margin-top:4px;color:var(--muted);font:11px Arial,sans-serif}.reader-actions{display:flex;gap:7px}.reader-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px;align-items:start}.reading-card{background:var(--paper2);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;min-height:68vh;display:flex;flex-direction:column}.reading-toolbar{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--line);gap:8px}.toolbar-group{display:flex;gap:6px;align-items:center}.reading-toolbar button{padding:8px 11px;font:12px Arial,sans-serif}.reading-toolbar .iconbtn{width:36px;height:36px;font-size:17px;padding:0}.book-stage{position:relative;flex:1;min-height:58vh}#viewer{height:100%;min-height:58vh;width:100%;overflow:hidden}#viewer iframe{background:var(--paper2)}.page-footer{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font:11px Arial,sans-serif}.page-footer button{font-size:12px;padding:8px 13px}.sidebar{display:flex;flex-direction:column;gap:12px}.panel{border:1px solid var(--line);background:#fffdf899;border-radius:16px;overflow:hidden}.panel-head{padding:14px 15px;border-bottom:1px solid var(--line);font-size:16px}.panel-body{padding:12px}.tabrow{display:flex;gap:5px;padding:10px 10px 0}.tabrow button{flex:1;padding:8px 4px;font:11px Arial,sans-serif}.tabrow button.active{background:var(--ink);color:white;border-color:var(--ink)}.list{max-height:38vh;overflow:auto}.list-item{padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.5;cursor:pointer}.list-item:last-child{border:0}.list-item small{display:block;color:var(--muted);font:10px Arial,sans-serif;margin-top:5px}.list-item .remove{float:right;border:0;background:transparent;padding:0 4px;color:var(--muted)}.empty{padding:18px 10px;color:var(--muted);font-size:13px;line-height:1.6}.progress-wrap{height:3px;background:var(--line)}#progress{height:100%;width:0;background:var(--accent);transition:width .2s}.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:white;padding:12px 18px;border-radius:99px;font:12px Arial,sans-serif;z-index:20;transition:.2s;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.modal-backdrop{position:fixed;inset:0;background:#211c17a8;z-index:15;display:none;align-items:flex-end;justify-content:center}.modal{background:var(--paper2);width:min(100%,520px);padding:22px;border-radius:24px 24px 0 0;max-height:80vh;overflow:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom))}.modal h2{font-weight:normal;margin:0 0 16px}.modal .rowline{display:flex;gap:8px;margin:8px 0}.modal input{min-width:0;flex:1;border:1px solid var(--line);border-radius:12px;padding:12px;background:white}.modal .tocitem{padding:13px 4px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.4}.modal .tocitem small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.selection-pop{position:fixed;z-index:10;display:none;background:var(--ink);padding:6px;border-radius:30px;box-shadow:var(--shadow);gap:5px}.selection-pop button{font:12px Arial,sans-serif;padding:9px 12px;border:0}.selection-pop button:first-child{background:var(--highlight);color:var(--ink)}.selection-pop button:last-child{background:transparent;color:white}
+@media(max-width:760px){header{height:60px;padding:0 15px}.wordmark{font-size:27px}main{padding:22px 15px 35px}.reader-layout{display:block}.sidebar{margin-top:14px}.reading-card{min-height:68vh}.book-stage,#viewer{min-height:58vh}.booktop{padding:13px 2px}.reader-actions button{font-size:12px;padding:9px 11px}.sidebar .panel{display:none}.sidebar .panel.mobile-open{display:block}.reading-toolbar{padding:9px}.reading-toolbar button{padding:8px 9px}.reading-toolbar .iconbtn{width:34px;height:34px}.list{max-height:30vh}}
+</style>
+</head>
+<body>
+<header><div class="wordmark">alcove<span>.</span></div><div class="header-actions"><button id="openBookBtn" class="primary">Open a book</button><button id="homeBtn" class="iconbtn" title="Library" aria-label="Library">⌂</button></div></header>
+<main id="home">
+<section class="welcome">
+<div class="eyebrow">A little place to read</div>
+<h1>Make yourself<br><em>at home.</em></h1>
+<p>Your books, your pace, your quiet corner.<br>Open an EPUB and settle in.</p>
+<div class="upload-card"><div class="upload-symbol">⌑</div><strong>Bring a book into alcove.</strong><small>Choose an EPUB file from your iPhone, iCloud Drive, or Files app.</small><br><button id="chooseBookBtn" class="primary">Choose an EPUB</button></div>
+<div class="privacy">YOUR BOOKS STAY ON THIS DEVICE</div>
+</section>
+</main>
+<section id="reader">
+<div class="booktop"><div class="booktitle"><strong id="bookTitle">Your book</strong><small id="bookAuthor">Ready when you are</small></div><div class="reader-actions"><button id="tocBtn">Contents</button><button id="bookmarkBtn" class="iconbtn" aria-label="Bookmark this page" title="Bookmark this page">♧</button></div></div>
+<div class="reader-layout">
+<div class="reading-card">
+<div class="reading-toolbar">
+<div class="toolbar-group"><button id="prevBtn" class="iconbtn" aria-label="Previous page">‹</button><button id="nextBtn" class="iconbtn" aria-label="Next page">›</button></div>
+<div class="toolbar-group"><button id="fontDown">A−</button><button id="fontUp">A+</button><button id="themeBtn">Aa</button></div>
+</div>
+<div class="book-stage"><div id="viewer"></div></div>
+<div class="progress-wrap"><div id="progress"></div></div>
+<div class="page-footer"><span id="locationLabel">Opening book…</span><button id="jumpBtn">Go to…</button></div>
+</div>
+<aside class="sidebar">
+<div class="panel"><div class="tabrow"><button id="marksTab" class="active">Bookmarks</button><button id="highlightsTab">Highlights</button></div><div id="savedList" class="list"><div class="empty">Your saved places will live here.</div></div></div>
+<div class="panel"><div class="panel-head">Reading note</div><div class="panel-body" style="font-size:12px;line-height:1.6;color:var(--muted)">Select text in the book to highlight a passage. Your highlights and bookmarks are saved on this device.</div></div>
+</aside>
+</div>
+</section>
+<input id="fileInput" type="file" accept=".epub,application/epub+zip" hidden>
+<div id="modalBackdrop" class="modal-backdrop"><div class="modal"><h2 id="modalTitle">Contents</h2><div id="modalBody"></div><div style="text-align:right;margin-top:18px"><button id="closeModal">Close</button></div></div></div>
+<div id="selectionPop" class="selection-pop"><button id="highlightSelection">Highlight</button><button id="cancelSelection">×</button></div>
+<div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const home=$('home'), reader=$('reader'), fileInput=$('fileInput');
+let book=null, rendition=null, bookKey='', bookName='', currentCfi='', currentHref='', currentPercent=0, savedMode='bookmarks', selectedText='', selectedCfi='', fontSize=100, themeIndex=0;
+const themes=[
+ {name:'Paper',bg:'#fffdf8',fg:'#302d29',accent:'#8a715e'},
+ {name:'Sepia',bg:'#f2e5cf',fg:'#493a2b',accent:'#8a715e'},
+ {name:'Night',bg:'#252522',fg:'#e8e0d3',accent:'#c4a889'}
+];
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2300)}
+function storeKey(suffix){return 'alcove:'+bookKey+':'+suffix}
+function readStore(suffix){try{return JSON.parse(localStorage.getItem(storeKey(suffix))||'[]')}catch(e){return []}}
+function writeStore(suffix,data){try{localStorage.setItem(storeKey(suffix),JSON.stringify(data))}catch(e){toast('Could not save — device storage may be full.')} }
+function showHome(){reader.style.display='none';home.style.display='block';$('openBookBtn').style.display='';}
+function showReader(){home.style.display='none';reader.style.display='block';$('openBookBtn').style.display='';}
+function setTheme(){const t=themes[themeIndex];document.documentElement.style.setProperty('--paper2',t.bg);document.documentElement.style.setProperty('--ink',t.fg);document.documentElement.style.setProperty('--accent',t.accent);if(rendition)rendition.themes.default({'body':{color:t.fg+' !important','background':t.bg+' !important'},'p':{color:t.fg+' !important'},'h1,h2,h3,h4':{color:t.fg+' !important'}})}
+function updateProgress(location){if(!location)return;currentCfi=location.start.cfi;currentHref=location.start.href;currentPercent=location.start.percentage||0;$('progress').style.width=Math.max(0,Math.min(100,currentPercent*100))+'%';$('locationLabel').textContent=Math.round(currentPercent*100)+'% through';saveProgress();renderSavedList()}
+function saveProgress(){if(!bookKey||!currentCfi)return;try{localStorage.setItem(storeKey('progress'),JSON.stringify({cfi:currentCfi,href:currentHref,percent:currentPercent}))}catch(e){}}
+async function openFile(file){
+ if(!file)return;if(!file.name.toLowerCase().endsWith('.epub')){toast('Please choose an EPUB file.');return}
+ if(!window.ePub){toast('Reader engine did not load. Check your connection and refresh.');return}
+ if(rendition){try{rendition.destroy()}catch(e){}rendition=null}if(book){try{book.destroy()}catch(e){}book=null}
+ bookName=file.name.replace(/\.epub$/i,'');bookKey='file-'+file.name+'-'+file.size;
+ $('bookTitle').textContent=bookName;$('bookAuthor').textContent='Loading your book…';$('viewer').innerHTML='';showReader();toast('Opening your book…');
+ try{
+  const data=await file.arrayBuffer();book=ePub(data);rendition=book.renderTo('viewer',{width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default'});
+  rendition.themes.default({'body':{color:themes[themeIndex].fg+' !important','background':themes[themeIndex].bg+' !important','font-family':'Georgia, serif','line-height':'1.7 !important','padding':'0 4% !important'},'p':{'line-height':'1.7 !important'},'::selection':{background:'#f2df8e'}});
+  rendition.themes.fontSize(fontSize+'%');
+  book.ready.then(async()=>{const meta=await book.loaded.metadata;$('bookTitle').textContent=meta.title||bookName;$('bookAuthor').textContent=meta.creator||'A quiet place for this story';});
+  rendition.on('relocated',updateProgress);
+  rendition.on('selected',(cfiRange,contents)=>{try{const range=rendition.getRange(cfiRange);selectedText=range.toString().trim();selectedCfi=cfiRange;if(selectedText){const pop=$('selectionPop');pop.style.display='flex';pop.style.left='50%';pop.style.top='auto';pop.style.bottom='calc(84px + env(safe-area-inset-bottom))';pop.style.transform='translateX(-50%)'}}catch(e){}});
+  await rendition.display();
+  const prog=JSON.parse(localStorage.getItem(storeKey('progress'))||'null');if(prog&&prog.cfi){try{await rendition.display(prog.cfi)}catch(e){}}
+  renderSavedList();toast('Your reading nook is ready.');
+ }catch(err){console.error(err);toast('This EPUB could not be opened. Try another file.');}
+}
+function addBookmark(){if(!currentCfi){toast('Turn to a page first.');return}const arr=readStore('bookmarks');if(arr.some(x=>x.cfi===currentCfi)){toast('This page is already bookmarked.');return}arr.unshift({cfi:currentCfi,href:currentHref,percent:currentPercent,label:'Page at '+Math.round(currentPercent*100)+'%',date:Date.now()});writeStore('bookmarks',arr);renderSavedList();toast('Page bookmarked.')}
+function addHighlight(){if(!selectedText||!selectedCfi){toast('Select a passage in the book first.');return}const arr=readStore('highlights');if(arr.some(x=>x.cfi===selectedCfi)){toast('That passage is already highlighted.');$('selectionPop').style.display='none';return}arr.unshift({cfi:selectedCfi,text:selectedText,href:currentHref,date:Date.now()});writeStore('highlights',arr);try{rendition.annotations.highlight(selectedCfi,{},()=>{},'alcove-highlight',{fill:'#f2df8e', 'fill-opacity':'0.55','mix-blend-mode':'multiply'})}catch(e){}$('selectionPop').style.display='none';renderSavedList();toast('Passage highlighted.')}
+function applyHighlights(){if(!rendition)return;readStore('highlights').forEach(h=>{try{rendition.annotations.highlight(h.cfi,{},()=>{},'alcove-highlight',{fill:'#f2df8e','fill-opacity':'0.55','mix-blend-mode':'multiply'})}catch(e){}})}
+function renderSavedList(){const list=$('savedList');const arr=readStore(savedMode);list.innerHTML='';if(!arr.length){list.innerHTML='<div class="empty">'+(savedMode==='bookmarks'?'No bookmarks just yet. Save a page to find your way back.':'No highlights yet. Select a passage while reading to keep it.')+'</div>';return}
+ arr.forEach((item,i)=>{const div=document.createElement('div');div.className='list-item';const text=savedMode==='bookmarks'?(item.label||'Bookmarked page'):('“'+(item.text||'').slice(0,115)+(item.text&&item.text.length>115?'…':'')+'”');div.textContent=text;const small=document.createElement('small');small.textContent=savedMode==='bookmarks'?(Math.round((item.percent||0)*100)+'% through the book'):'Saved highlight';div.appendChild(small);const rm=document.createElement('button');rm.className='remove';rm.textContent='×';rm.setAttribute('aria-label','Remove saved item');rm.onclick=e=>{e.stopPropagation();const a=readStore(savedMode);a.splice(i,1);writeStore(savedMode,a);renderSavedList();if(savedMode==='highlights'&&rendition){try{rendition.annotations.remove(item.cfi,'highlight')}catch(e){}}};div.appendChild(rm);div.onclick=()=>{if(rendition&&item.cfi)rendition.display(item.cfi);if(window.innerWidth<760)$('savedList').closest('.panel').classList.remove('mobile-open')};list.appendChild(div)});
+ if(savedMode==='highlights')applyHighlights();
+}
+function openModal(title,content){$('modalTitle').textContent=title;$('modalBody').innerHTML=content;$('modalBackdrop').style.display='flex'}
+function showToc(){if(!book){return}book.loaded.navigation.then(nav=>{let html='';function walk(items,depth=0){items.forEach(item=>{html+='<div class="tocitem" style="padding-left:'+(depth*14+4)+'px" data-href="'+String(item.href||'').replace(/"/g,'&quot;')+'">'+escapeHtml(item.label||'Untitled chapter')+'<small>Open chapter</small></div>';if(item.subitems)walk(item.subitems,depth+1)})}walk(nav.toc||[]);if(!html)html='<div class="empty">This book does not include a table of contents.</div>';openModal('Contents',html);$('modalBody').querySelectorAll('.tocitem').forEach(el=>el.onclick=()=>{const href=el.getAttribute('data-href');if(href&&rendition)rendition.display(href);$('modalBackdrop').style.display='none'})})}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function jumpTo(){const html='<p style="color:var(--muted);font-size:13px;line-height:1.6">Enter a percentage to jump to an approximate place in your book.</p><div class="rowline"><input id="jumpPercent" type="number" min="0" max="100" placeholder="e.g. 35"><button id="jumpGo" class="primary">Go</button></div>';openModal('Go to a place',html);$('jumpGo').onclick=()=>{let n=Number($('jumpPercent').value);if(Number.isFinite(n)&&n>=0&&n<=100){rendition.display(n/100);$('modalBackdrop').style.display='none'}else toast('Enter a number from 0 to 100.')}}
+$('chooseBookBtn').onclick=()=>fileInput.click();$('openBookBtn').onclick=()=>fileInput.click();fileInput.onchange=()=>{if(fileInput.files&&fileInput.files[0])openFile(fileInput.files[0]);fileInput.value=''};
+$('homeBtn').onclick=()=>showHome();$('bookmarkBtn').onclick=addBookmark;$('prevBtn').onclick=()=>rendition&&rendition.prev();$('nextBtn').onclick=()=>rendition&&rendition.next();$('tocBtn').onclick=showToc;$('jumpBtn').onclick=jumpTo;
+$('fontDown').onclick=()=>{fontSize=Math.max(75,fontSize-10);if(rendition)rendition.themes.fontSize(fontSize+'%')};$('fontUp').onclick=()=>{fontSize=Math.min(180,fontSize+10);if(rendition)rendition.themes.fontSize(fontSize+'%')};$('themeBtn').onclick=()=>{themeIndex=(themeIndex+1)%themes.length;setTheme()};$('closeModal').onclick=()=>$('modalBackdrop').style.display='none';$('modalBackdrop').onclick=e=>{if(e.target===$('modalBackdrop'))$('modalBackdrop').style.display='none'};
+$('highlightSelection').onclick=addHighlight;$('cancelSelection').onclick=()=>$('selectionPop').style.display='none';$('marksTab').onclick=()=>{savedMode='bookmarks';$('marksTab').classList.add('active');$('highlightsTab').classList.remove('active');renderSavedList()};$('highlightsTab').onclick=()=>{savedMode='highlights';$('highlightsTab').classList.add('active');$('marksTab').classList.remove('active');renderSavedList()};
+document.addEventListener('keydown',e=>{if(!rendition)return;if(e.key==='ArrowLeft')rendition.prev();if(e.key==='ArrowRight')rendition.next();if(e.key==='Escape'){$('modalBackdrop').style.display='none';$('selectionPop').style.display='none'}});
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+})();
+</script>
+</body>
+</html>
